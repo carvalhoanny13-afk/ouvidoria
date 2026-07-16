@@ -1,0 +1,38 @@
+=== MEDIDAS DAX PARA POWER BI ===
+
+1. TOTAL DE MANIFESTAÇÕES
+Total_Manifestacoes = COUNTA('Ouvidoria'[N_PROCESSO])
+
+2. TAXA DE RESOLUÇÃO
+Taxa_Resolucao = DIVIDE(
+    CALCULATE(COUNTA('Ouvidoria'[N_PROCESSO]), 'Ouvidoria'[STATUS] = "Concluído"),
+    COUNTA('Ouvidoria'[N_PROCESSO])
+)
+
+3. TEMPO MÉDIO DE RESOLUÇÃO
+Tempo_Medio_Resolucao = AVERAGE('Ouvidoria'[DIAS_RESOLUCAO])
+
+4. META DE PRAZO (até 10 dias)
+Meta_Prazo = DIVIDE(
+    CALCULATE(
+        COUNTA('Ouvidoria'[N_PROCESSO]),
+        'Ouvidoria'[DIAS_RESOLUCAO] <= 10,
+        'Ouvidoria'[STATUS] = "Concluído"
+    ),
+    CALCULATE(COUNTA('Ouvidoria'[N_PROCESSO]), 'Ouvidoria'[STATUS] = "Concluído")
+)
+
+5. MANIFESTAÇÕES PENDENTES
+Total_Pendentes = CALCULATE(COUNTA('Ouvidoria'[N_PROCESSO]), 'Ouvidoria'[STATUS] <> "Concluído")
+
+6. TAXA DE RECLAMAÇÃO
+Taxa_Reclamacao = DIVIDE(
+    CALCULATE(COUNTA('Ouvidoria'[N_PROCESSO]), 'Ouvidoria'[TIPO_MANIFESTACAO] = "RECLAMAÇÃO"),
+    COUNTA('Ouvidoria'[N_PROCESSO])
+)
+
+7. DISTRIBUIÇÃO POR TIPO (percentual)
+Pct_Tipo = DIVIDE(
+    CALCULATE(COUNTA('Ouvidoria'[N_PROCESSO])),
+    CALCULATE(COUNTA('Ouvidoria'[N_PROCESSO]), ALL('Ouvidoria'[TIPO_MANIFESTACAO]))
+)
